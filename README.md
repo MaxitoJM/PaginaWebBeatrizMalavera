@@ -84,19 +84,30 @@ hace por el **correo del autor del commit**, no por quién ejecuta el push. Si e
 correo no corresponde a una dirección registrada en la cuenta de Vercel, el
 despliegue queda en estado *Blocked*.
 
-Comprobar el autor de un commit:
+La regla es simple: **el correo del autor del commit debe ser una dirección
+registrada en la cuenta de Vercel propietaria del proyecto.**
+
+Por eso este repositorio fija localmente el autor, sin alterar la configuración
+global usada en otros proyectos:
+
+```bash
+git config --local user.email "<correo de la cuenta de Vercel>"
+```
+
+Comprobar el autor antes de publicar:
 
 ```bash
 git log -1 --format="%an <%ae>"
 ```
 
-Formas de resolverlo, de menor a mayor costo:
+Dos advertencias aprendidas a golpes:
 
-1. Registrar y verificar ese correo en Vercel (*Settings → Account → Emails*).
-2. Hacer público el repositorio: la restricción no aplica a repos públicos y el
-   proyecto no contiene credenciales ni datos sensibles.
-3. Publicar con el CLI (`vercel --prod`), que sube el build directamente y no
-   verifica el autor del commit.
+- Las direcciones `@users.noreply.github.com` **no sirven**: no reciben correo,
+  así que no se pueden verificar en Vercel.
+- El primer despliegue del proyecto puede aparecer como correcto aunque su
+  autor no esté autorizado, porque la importación inicial no aplica esta
+  verificación. No sirve como referencia.
 
-Las direcciones `@users.noreply.github.com` **no sirven** para la primera
-opción, porque no reciben correo y no se pueden verificar.
+Alternativas si no se quiere depender del autor del commit: hacer público el
+repositorio, o publicar con el CLI (`vercel --prod`), que sube el build
+directamente.
