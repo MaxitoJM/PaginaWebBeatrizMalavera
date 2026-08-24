@@ -47,6 +47,20 @@ export const NAV_ITEMS = [
   { id: 'procesos', label: 'Proceso' },
 ] as const;
 
+/**
+ * Lleva a una sección de la portada. Si el visitante está en un documento
+ * legal, primero vuelve al inicio y espera a que la portada se renderice.
+ */
 export const scrollToSection = (sectionId: string) => {
-  document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+  const scroll = () =>
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+
+  if (window.location.hash) {
+    window.location.hash = '';
+    // Damos un fotograma para que React monte la portada antes de desplazar.
+    requestAnimationFrame(() => requestAnimationFrame(scroll));
+    return;
+  }
+
+  scroll();
 };

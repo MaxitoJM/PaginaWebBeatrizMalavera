@@ -2,6 +2,8 @@ import React from 'react';
 import { Phone, Mail, MapPin, Clock, Linkedin, Facebook, Instagram } from 'lucide-react';
 import { CONTACT, NAV_ITEMS, SITE, scrollToSection } from '../data/site';
 import { SERVICES } from '../data/services';
+import { LEGAL_DOCS } from '../data/legal';
+import { navigateTo } from '../hooks/useHashRoute';
 
 const socialLinks = [
   { icon: Linkedin, label: 'LinkedIn', href: '#' },
@@ -128,18 +130,15 @@ const Footer: React.FC = () => {
               © {year} {SITE.name}. Todos los derechos reservados.
             </p>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-ink-200/60">
-              <a href="#" className="transition-colors hover:text-brass-300">
-                Aviso Legal
-              </a>
-              <a href="#" className="transition-colors hover:text-brass-300">
-                Política de Privacidad
-              </a>
-              <a href="#" className="transition-colors hover:text-brass-300">
-                Términos de Servicio
-              </a>
-              <a href="#" className="transition-colors hover:text-brass-300">
-                Código de Ética
-              </a>
+              {LEGAL_DOCS.map((doc) => (
+                <button
+                  key={doc.slug}
+                  onClick={() => navigateTo(doc.slug)}
+                  className="transition-colors hover:text-brass-300"
+                >
+                  {doc.title}
+                </button>
+              ))}
             </div>
           </div>
         </div>
