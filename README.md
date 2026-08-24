@@ -76,13 +76,27 @@ llega a WhatsApp. Para almacenarlas habría que añadir un backend.
 
 Se despliega en Vercel desde la rama `main`.
 
-> **Importante:** el repositorio es privado y el plan Hobby no admite
-> colaboradores. Vercel bloquea los despliegues cuyo autor de commit no
-> reconozca. Este repositorio fija el autor localmente:
->
-> ```
-> git config --local user.email "135483965+MaxitoJM@users.noreply.github.com"
-> ```
->
-> Si un despliegue aparece como *Blocked*, revisar primero el correo del autor
-> del commit.
+### Despliegues bloqueados
+
+En el plan Hobby, y mientras el repositorio sea **privado**, Vercel solo publica
+los commits cuyo autor reconozca como titular del proyecto. La identificación se
+hace por el **correo del autor del commit**, no por quién ejecuta el push. Si el
+correo no corresponde a una dirección registrada en la cuenta de Vercel, el
+despliegue queda en estado *Blocked*.
+
+Comprobar el autor de un commit:
+
+```bash
+git log -1 --format="%an <%ae>"
+```
+
+Formas de resolverlo, de menor a mayor costo:
+
+1. Registrar y verificar ese correo en Vercel (*Settings → Account → Emails*).
+2. Hacer público el repositorio: la restricción no aplica a repos públicos y el
+   proyecto no contiene credenciales ni datos sensibles.
+3. Publicar con el CLI (`vercel --prod`), que sube el build directamente y no
+   verifica el autor del commit.
+
+Las direcciones `@users.noreply.github.com` **no sirven** para la primera
+opción, porque no reciben correo y no se pueden verificar.
