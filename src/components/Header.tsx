@@ -1,96 +1,117 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Scale, Phone } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Menu, X, Phone } from 'lucide-react';
+import { NAV_ITEMS, SITE, scrollToSection } from '../data/site';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMobileMenuOpen(false);
-    }
+  const goTo = (sectionId: string) => {
+    scrollToSection(sectionId);
+    setIsMobileMenuOpen(false);
   };
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-lg' : 'bg-white/95 backdrop-blur-sm'
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled
+          ? 'bg-white/95 backdrop-blur-md shadow-soft'
+          : 'bg-transparent'
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-3">
-            <div className="bg-blue-700 p-2 rounded-lg">
-              <Scale className="h-6 w-6 text-white" />
-            </div>
-            <div>
-              <h1 className="font-bold text-lg text-gray-900">Beatriz Helena Malavera</h1>
-              <p className="text-xs text-gray-600">Derecho Financiero</p>
-            </div>
-          </div>
+        <div className="flex items-center justify-between h-20">
+          {/* Identidad: solo el nombre, sin logotipo */}
+          <button
+            onClick={() => goTo('inicio')}
+            className="text-left group"
+            aria-label="Ir al inicio"
+          >
+            <span
+              className={`block font-display text-lg sm:text-xl font-semibold leading-tight transition-colors duration-500 ${
+                isScrolled ? 'text-ink-950' : 'text-white'
+              }`}
+            >
+              {SITE.name}
+            </span>
+            <span
+              className={`block text-[0.68rem] font-semibold uppercase tracking-[0.2em] transition-colors duration-500 ${
+                isScrolled ? 'text-brass-600' : 'text-brass-300'
+              }`}
+            >
+              {SITE.role}
+            </span>
+          </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <button onClick={() => scrollToSection('inicio')} className="text-gray-700 hover:text-blue-700 font-medium transition-colors">
-              Inicio
-            </button>
-            <button onClick={() => scrollToSection('sobre-mi')} className="text-gray-700 hover:text-blue-700 font-medium transition-colors">
-              Sobre mí
-            </button>
-            <button onClick={() => scrollToSection('servicios')} className="text-gray-700 hover:text-blue-700 font-medium transition-colors">
-              Servicios
-            </button>
-            <button onClick={() => scrollToSection('procesos')} className="text-gray-700 hover:text-blue-700 font-medium transition-colors">
-              Proceso
-            </button>
-            <button onClick={() => scrollToSection('contacto')} className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition-colors flex items-center space-x-2">
+          {/* Navegación de escritorio */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {NAV_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => goTo(item.id)}
+                className={`relative text-sm font-medium transition-colors duration-300 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-brass-500 after:transition-all after:duration-300 hover:after:w-full ${
+                  isScrolled
+                    ? 'text-ink-700 hover:text-ink-950'
+                    : 'text-white/85 hover:text-white'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+            <button
+              onClick={() => goTo('contacto')}
+              className="inline-flex items-center gap-2 rounded-full bg-brass-500 px-6 py-2.5 text-sm font-semibold text-white shadow-soft transition-all duration-300 hover:bg-brass-600 hover:shadow-lift hover:-translate-y-0.5"
+            >
               <Phone className="h-4 w-4" />
-              <span>Consulta</span>
+              <span>Consulta gratuita</span>
             </button>
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Botón de menú móvil */}
           <button
-            className="md:hidden p-2"
+            className={`lg:hidden p-2 rounded-lg transition-colors ${
+              isScrolled ? 'text-ink-900' : 'text-white'
+            }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
+      </div>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg border-t">
-            <nav className="px-4 py-4 space-y-4">
-              <button onClick={() => scrollToSection('inicio')} className="block w-full text-left text-gray-700 hover:text-blue-700 font-medium">
-                Inicio
-              </button>
-              <button onClick={() => scrollToSection('sobre-mi')} className="block w-full text-left text-gray-700 hover:text-blue-700 font-medium">
-                Sobre mí
-              </button>
-              <button onClick={() => scrollToSection('servicios')} className="block w-full text-left text-gray-700 hover:text-blue-700 font-medium">
-                Servicios
-              </button>
-              <button onClick={() => scrollToSection('procesos')} className="block w-full text-left text-gray-700 hover:text-blue-700 font-medium">
-                Proceso
-              </button>
-              <button onClick={() => scrollToSection('contacto')} className="flex items-center space-x-2 bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors">
-                <Phone className="h-4 w-4" />
-                <span>Consulta</span>
-              </button>
-            </nav>
-          </div>
-        )}
+      {/* Navegación móvil */}
+      <div
+        className={`lg:hidden overflow-hidden bg-white shadow-lift transition-[max-height,opacity] duration-400 ${
+          isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <nav className="px-6 py-6 space-y-1">
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => goTo(item.id)}
+              className="block w-full text-left py-2.5 text-ink-700 font-medium transition-colors hover:text-brass-600"
+            >
+              {item.label}
+            </button>
+          ))}
+          <button
+            onClick={() => goTo('contacto')}
+            className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-brass-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-brass-600"
+          >
+            <Phone className="h-4 w-4" />
+            <span>Consulta gratuita</span>
+          </button>
+        </nav>
       </div>
     </header>
   );

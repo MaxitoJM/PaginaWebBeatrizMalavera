@@ -1,3 +1,69 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Compensa el encabezado fijo al saltar a una sección */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-white text-ink-900 font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-brass-200 text-ink-950;
+  }
+
+  /* Foco visible y consistente para navegación por teclado */
+  :where(a, button, input, select, textarea):focus-visible {
+    @apply outline-none ring-2 ring-brass-400 ring-offset-2 ring-offset-white rounded;
+  }
+}
+
+@layer components {
+  /* Estado inicial y final de las apariciones al hacer scroll.
+     Se ocultan solo si el JS marcó el documento como listo; así, si el script
+     no corre o el navegador no soporta IntersectionObserver, el contenido
+     siempre queda visible. */
+  .reveal-ready .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal-ready .reveal-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em];
+  }
+}
+
+/* Respeta la preferencia del sistema de reducir movimiento */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal-ready .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,83 +1,110 @@
 import React from 'react';
-import { ArrowRight, CheckCircle, Users, TrendingDown } from 'lucide-react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { SITE, scrollToSection } from '../data/site';
+
+const stats = [
+  { value: '+3.000', label: 'Casos acompañados' },
+  { value: '15+', label: 'Años de experiencia' },
+  { value: '100%', label: 'Confidencialidad' },
+];
 
 const Hero: React.FC = () => {
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
-    <section id="inicio" className="relative min-h-screen bg-gradient-to-br from-blue-50 to-white pt-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <div className="inline-flex items-center px-4 py-2 bg-teal-100 text-teal-800 rounded-full text-sm font-medium">
-                <CheckCircle className="h-4 w-4 mr-2" />
-                Especialista en Derecho Financiero
-              </div>
-              <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Soluciones legales efectivas en 
-                <span className="text-blue-700 block">insolvencia y gestión de deudas</span>
-              </h1>
-              <p className="text-xl text-gray-600 leading-relaxed">
-                Asesoría experta para reducir plazos, pagar menos intereses y recuperar tu estabilidad financiera con estrategias legales personalizadas.
+    <section
+      id="inicio"
+      className="relative isolate overflow-hidden bg-ink-950 pt-28 pb-16 lg:pt-36 lg:pb-24"
+    >
+      {/* Fondo: degradado profundo + halo dorado de apoyo */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 bg-[radial-gradient(120%_90%_at_78%_18%,#233450_0%,#152238_45%,#0c1526_100%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute -top-24 right-[8%] -z-10 h-[32rem] w-[32rem] rounded-full bg-brass-500/12 blur-3xl"
+      />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+          {/* Bloque principal: el nombre manda */}
+          <div className="lg:col-span-7 animate-fade-up">
+            <p className="eyebrow border border-brass-400/30 bg-brass-400/10 text-brass-300">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Abogada · Especialista en Derecho Concursal
+            </p>
+
+            <h1 className="mt-6 font-display font-semibold text-white leading-[0.95] tracking-tight text-[2.75rem] sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
+              <span className="block">{SITE.firstName}</span>
+              <span className="block text-brass-300">{SITE.lastName}</span>
+            </h1>
+
+            {/* Subtítulo claramente secundario respecto al nombre */}
+            <div className="mt-7 flex items-start gap-4">
+              <span
+                aria-hidden="true"
+                className="mt-2.5 h-px w-10 flex-none bg-brass-400/70 sm:w-14"
+              />
+              <p className="max-w-xl text-base font-light leading-relaxed text-ink-100 sm:text-lg">
+                {SITE.tagline}
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button 
+            <p className="mt-5 max-w-xl text-sm leading-relaxed text-ink-200/80 sm:text-base">
+              Magíster en Derecho Comercial y directora del Centro de Conciliación y
+              Arbitraje Constructores de Paz. Acompañamiento jurídico claro y
+              estratégico en insolvencia, negociación de obligaciones y resolución de
+              conflictos.
+            </p>
+
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <button
                 onClick={() => scrollToSection('contacto')}
-                className="bg-blue-700 text-white px-8 py-4 rounded-lg hover:bg-blue-800 transition-all duration-200 flex items-center justify-center space-x-2 font-semibold shadow-lg hover:shadow-xl"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-brass-500 px-8 py-4 font-semibold text-white shadow-lift transition-all duration-300 hover:bg-brass-600 hover:-translate-y-0.5"
               >
-                <span>Agenda una consulta</span>
-                <ArrowRight className="h-5 w-5" />
+                <span>Agenda tu consulta gratuita</span>
+                <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               </button>
-              <button 
+              <button
                 onClick={() => scrollToSection('servicios')}
-                className="bg-white text-blue-700 px-8 py-4 rounded-lg border-2 border-blue-700 hover:bg-blue-50 transition-all duration-200 font-semibold"
+                className="inline-flex items-center justify-center rounded-full border border-white/25 px-8 py-4 font-semibold text-white transition-all duration-300 hover:border-white/60 hover:bg-white/5"
               >
                 Ver servicios
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-6 pt-8">
-              <div className="text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <Users className="h-8 w-8 text-teal-600" />
+            <dl className="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-white/10 pt-8">
+              {stats.map((stat) => (
+                <div key={stat.label}>
+                  <dt className="sr-only">{stat.label}</dt>
+                  <dd>
+                    <span className="block font-display text-2xl font-semibold text-white sm:text-3xl">
+                      {stat.value}
+                    </span>
+                    <span className="mt-1 block text-xs leading-snug text-ink-200/70 sm:text-sm">
+                      {stat.label}
+                    </span>
+                  </dd>
                 </div>
-                <div className="text-2xl font-bold text-gray-900">500+</div>
-                <div className="text-sm text-gray-600">Casos exitosos</div>
-              </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <TrendingDown className="h-8 w-8 text-teal-600" />
-                </div>
-                <div className="text-2xl font-bold text-gray-900">70%</div>
-                <div className="text-sm text-gray-600">Reducción promedio</div>
-              </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center mb-2">
-                  <CheckCircle className="h-8 w-8 text-teal-600" />
-                </div>
-                <div className="text-2xl font-bold text-gray-900">15</div>
-                <div className="text-sm text-gray-600">Años experiencia</div>
-              </div>
-            </div>
+              ))}
+            </dl>
           </div>
 
-          <div className="relative">
-            <div className="relative z-10">
-              <img 
-                src="https://images.pexels.com/photos/5668473/pexels-photo-5668473.jpeg?auto=compress&cs=tinysrgb&w=800" 
-                alt="Abogada especialista en insolvencia trabajando en su oficina" 
-                className="w-full h-auto rounded-2xl shadow-2xl"
+          {/* Retrato */}
+          <div className="relative lg:col-span-5 animate-fade-in">
+            <div className="relative mx-auto max-w-sm lg:max-w-none">
+              <div
+                aria-hidden="true"
+                className="absolute -inset-3 rounded-[2rem] border border-brass-400/25"
+              />
+              <img
+                src="/img/beatriz-retrato.jpg"
+                alt="Retrato profesional de Beatriz Helena Malavera López"
+                width={1071}
+                height={1281}
+                loading="eager"
+                className="relative w-full rounded-[1.75rem] object-cover shadow-lift"
               />
             </div>
-            <div className="absolute -top-4 -right-4 w-full h-full bg-blue-100 rounded-2xl -z-10"></div>
           </div>
         </div>
       </div>
