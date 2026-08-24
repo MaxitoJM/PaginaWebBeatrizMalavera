@@ -22,6 +22,11 @@ const EMPTY_FORM: FormData = {
   message: '',
 };
 
+/** Datos enviados junto con la constancia de las autorizaciones otorgadas. */
+interface Submission extends FormData {
+  allowsMarketing: boolean;
+}
+
 const inputClass =
   'w-full rounded-xl border border-ink-200 bg-white px-4 py-3 text-ink-900 placeholder:text-ink-400 transition-colors duration-200 focus:border-brass-400 focus:outline-none focus:ring-2 focus:ring-brass-400/30';
 
@@ -39,7 +44,8 @@ const readDraft = (): FormData => {
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>(readDraft);
   const [hasConsent, setHasConsent] = useState(false);
-  const [submitted, setSubmitted] = useState<FormData | null>(null);
+  const [allowsMarketing, setAllowsMarketing] = useState(false);
+  const [submitted, setSubmitted] = useState<Submission | null>(null);
 
   // Guardamos el borrador para que no se pierda si la página se recarga.
   useEffect(() => {
@@ -62,6 +68,7 @@ const ContactForm: React.FC = () => {
   const clearDraft = () => {
     setFormData(EMPTY_FORM);
     setHasConsent(false);
+    setAllowsMarketing(false);
     try {
       localStorage.removeItem(DRAFT_KEY);
     } catch {
@@ -71,7 +78,7 @@ const ContactForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(formData);
+    setSubmitted({ ...formData, allowsMarketing });
     // El borrador ya cumplió su función: se elimina del dispositivo.
     try {
       localStorage.removeItem(DRAFT_KEY);
@@ -81,8 +88,11 @@ const ContactForm: React.FC = () => {
     window.scrollTo({ top: window.scrollY, behavior: 'auto' });
   };
 
-  /** Arma el texto de la consulta para WhatsApp o correo. */
-  const buildMessage = (data: FormData) => {
+  /**
+   * Arma el texto de la consulta para WhatsApp o correo. Incluye constancia de
+   * las autorizaciones otorgadas, que la Ley 1581 de 2012 exige poder probar.
+   */
+  const buildMessage = (data: Submission) => {
     const serviceTitle =
       SERVICES.find((s) => s.id === data.service)?.title ?? 'Consulta general';
 
@@ -96,6 +106,13 @@ const ContactForm: React.FC = () => {
       '',
       'Situación:',
       data.message,
+      '',
+      '---',
+      'Autorizo el tratamiento de mis datos para atender esta consulta: SÍ',
+      `Autorizo el uso de mis datos para remisión de información: ${
+        data.allowsMarketing ? 'SÍ' : 'NO'
+      }`,
+      `Fecha: ${new Date().toLocaleString('es-CO')}`,
     ].join('\n');
   };
 
@@ -150,6 +167,7 @@ const ContactForm: React.FC = () => {
             setSubmitted(null);
             setFormData(EMPTY_FORM);
             setHasConsent(false);
+            setAllowsMarketing(false);
           }}
           className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-ink-600 transition-colors hover:text-ink-900"
         >
@@ -266,8 +284,9 @@ const ContactForm: React.FC = () => {
           </p>
         </div>
 
-        {/* Autorización previa y expresa (Ley 1581 de 2012) */}
-        <div className="rounded-xl border border-ink-200 bg-white p-4">
+        {/* Autorizaciones separadas (Ley 1581 de 2012): la primera es
+            necesaria para atender la consulta; la segunda es opcional. */}
+        <div className="space-y-3 rounded-xl border border-ink-200 bg-white p-4">
           <label htmlFor="consent" className="flex cursor-pointer items-start gap-3">
             <input
               type="checkbox"
@@ -290,6 +309,27 @@ const ContactForm: React.FC = () => {
                 política de tratamiento de datos
               </button>
               . *
+            </span>
+          </label>
+
+          <label
+            htmlFor="marketing"
+            className="flex cursor-pointer items-start gap-3 border-t border-ink-100 pt-3"
+          >
+            <input
+              type="checkbox"
+              id="marketing"
+              name="marketing"
+              checked={allowsMarketing}
+              onChange={(e) => setAllowsMarketing(e.target.checked)}
+              className="mt-0.5 h-4 w-4 flex-none rounded border-ink-300 text-brass-500 focus:ring-brass-400"
+            />
+            <span className="text-sm leading-relaxed text-ink-700">
+              Autorizo el uso de mis datos para la remisión de información sobre novedades
+              normativas, contenidos formativos y servicios.{' '}
+              <span className="text-ink-500">
+                Opcional. Puedes revocarla cuando quieras.
+              </span>
             </span>
           </label>
         </div>

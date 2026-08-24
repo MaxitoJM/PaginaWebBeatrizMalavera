@@ -3,18 +3,16 @@ import { CONTACT, SITE } from './site';
 /**
  * Documentos legales del sitio.
  *
- * IMPORTANTE: los valores marcados como PENDIENTE deben ser completados por la
- * titular antes de considerar el sitio plenamente conforme. El artículo 50 de
- * la Ley 1480 de 2011 exige identificar de forma cierta y permanente a quien
- * ofrece servicios por medios electrónicos.
+ * Por decisión de la titular no se publican números de documento de identidad
+ * ni de tarjeta profesional. La identificación se hace por nombre, domicilio
+ * profesional y canales de contacto, que es lo necesario para que el titular
+ * de los datos pueda ejercer sus derechos de habeas data ante un responsable
+ * determinado (Ley 1581 de 2012, art. 8).
  */
 export const IDENTIFICACION = {
   nombre: SITE.name,
-  documento: 'C.C. [PENDIENTE: número de cédula]',
-  tarjetaProfesional:
-    'T.P. [PENDIENTE: número] del Consejo Superior de la Judicatura',
   domicilio: CONTACT.office.full,
-  notificacionesJudiciales: CONTACT.email.display,
+  notificaciones: CONTACT.email.display,
 } as const;
 
 /** Fecha de última actualización que se muestra en cada documento. */
@@ -37,10 +35,9 @@ const responsable: LegalBlock = {
   heading: 'Responsable del tratamiento',
   list: [
     `Nombre: ${IDENTIFICACION.nombre}`,
-    `Identificación: ${IDENTIFICACION.documento}`,
-    `Tarjeta profesional: ${IDENTIFICACION.tarjetaProfesional}`,
-    `Domicilio y dirección para notificaciones: ${IDENTIFICACION.domicilio}`,
-    `Correo electrónico: ${CONTACT.email.display}`,
+    'Calidad: abogada en ejercicio, inscrita ante el Consejo Superior de la Judicatura',
+    `Domicilio profesional y dirección para notificaciones: ${IDENTIFICACION.domicilio}`,
+    `Correo electrónico: ${IDENTIFICACION.notificaciones}`,
     `Teléfono y WhatsApp: ${CONTACT.phone.display}`,
     `Horario de atención: ${CONTACT.schedule.full}`,
   ],
@@ -59,6 +56,7 @@ export const LEGAL_DOCS: LegalDoc[] = [
         paragraphs: [
           'Este sitio web tiene una finalidad informativa. Presenta la trayectoria profesional de la titular y las áreas del derecho en las que ejerce, principalmente derecho concursal, insolvencia de persona natural no comerciante, negociación de obligaciones y resolución de conflictos.',
           'La información publicada se ofrece de forma general y no constituye asesoría jurídica para un caso concreto. Ninguna sección de este sitio genera por sí sola una relación abogada-cliente, la cual solo nace del acuerdo expreso entre las partes y del otorgamiento del poder o mandato correspondiente.',
+          'Este sitio no realiza transacciones electrónicas: no vende servicios en línea, no procesa pagos ni recauda dinero. Su única función interactiva es permitir que una persona redacte una consulta y decida enviarla por WhatsApp o correo electrónico.',
         ],
       },
       {
@@ -140,13 +138,27 @@ export const LEGAL_DOCS: LegalDoc[] = [
           'Valorar preliminarmente el caso y ofrecer información sobre los servicios profesionales.',
           'Agendar y prestar la consulta inicial gratuita.',
           'Cumplir obligaciones legales y conservar constancia de la relación profesional.',
+          'Remitir información de interés sobre novedades normativas, contenidos formativos y servicios, únicamente si el titular otorgó esa autorización adicional.',
         ],
       },
       {
         heading: 'Autorización y canales de contacto',
         paragraphs: [
-          'El envío del formulario requiere la aceptación previa y expresa de esta política mediante una casilla que no viene marcada por defecto. Al aceptarla, el titular autoriza ser contactado por WhatsApp, llamada telefónica o correo electrónico, dentro del horario de atención indicado.',
+          'El envío del formulario requiere la aceptación previa y expresa de esta política mediante una casilla que no viene marcada por defecto. Al aceptarla, el titular autoriza ser contactado por WhatsApp, llamada telefónica o correo electrónico, dentro del horario de atención indicado, con el único fin de atender su consulta.',
           'En aplicación de la Ley 2300 de 2023, el titular puede indicar en cualquier momento cuáles canales autoriza, restringirlos o revocarlos, escribiendo al correo de contacto.',
+        ],
+      },
+      {
+        heading: 'Autorización para remisión de información',
+        paragraphs: [
+          'De forma separada e independiente, el titular puede autorizar el uso de sus datos para la remisión de información de interés: novedades normativas en materia de insolvencia y derecho concursal, contenidos formativos, invitaciones a charlas o cambios en los servicios ofrecidos.',
+          'Esta autorización es opcional y se otorga mediante una casilla distinta, que tampoco viene marcada por defecto. Negarla no impide recibir atención ni afecta la consulta: quien no la marque solo será contactado para responder lo que preguntó.',
+        ],
+        list: [
+          'Se otorga de forma libre, previa, expresa e informada.',
+          'No se cede ni se vende la base de datos a terceros con fines comerciales.',
+          'Puede revocarse en cualquier momento escribiendo al correo de contacto, sin necesidad de justificación.',
+          'Toda comunicación enviada incluirá un medio claro para solicitar la baja.',
         ],
       },
       {

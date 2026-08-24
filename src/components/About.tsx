@@ -16,7 +16,7 @@ const achievements = [
   },
   {
     icon: Users,
-    title: '+3.000 casos exitosos',
+    title: '+3.000 casos acompañados',
     description: 'Clientes satisfechos con soluciones personalizadas',
   },
 ];
