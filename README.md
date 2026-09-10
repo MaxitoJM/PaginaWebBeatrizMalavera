@@ -74,9 +74,34 @@ llega a WhatsApp. Para almacenarlas habría que añadir un backend.
 
 ## Despliegue
 
-Se despliega en Vercel desde la rama `main`.
+El dominio de producción es **https://beatrizmalavera.com** (sin `www`). Ese es
+el valor de `canonical`, `og:url`, `og:image` y `twitter:image` en `index.html`.
+Si el dominio cambia, hay que actualizar esas cuatro etiquetas: son absolutas
+porque WhatsApp, Facebook y LinkedIn no resuelven rutas relativas.
 
-### Despliegues bloqueados
+### Hosting estático (cPanel u otro)
+
+```bash
+npm install
+npm run build
+```
+
+Se sube **el contenido** de `dist/`, no la carpeta: `index.html` debe quedar en
+la raíz del destino. El build usa rutas relativas (`base: './'` en
+`vite.config.ts`), así que funciona igual en la raíz de un dominio que dentro de
+una subcarpeta.
+
+No hace falta `.htaccess` con reglas de reescritura: la navegación es por hash
+(`#/aviso-legal`) y no usa React Router, de modo que el servidor solo entrega
+`index.html` y nunca recibe rutas propias.
+
+El proyecto no usa variables de entorno, así que no hay `.env` que preparar.
+
+### Vercel
+
+También se despliega en Vercel desde la rama `main`.
+
+#### Despliegues bloqueados
 
 En el plan Hobby, y mientras el repositorio sea **privado**, Vercel solo publica
 los commits cuyo autor reconozca como titular del proyecto. La identificación se
