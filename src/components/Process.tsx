@@ -93,7 +93,7 @@ const Process: React.FC = () => {
               </div>
               <div className="relative min-h-[18rem] lg:min-h-full">
                 <img
-                  src="/img/centro-conciliacion.jpg"
+                  src="img/centro-conciliacion.jpg"
                   alt="Audiencia de conciliación en el Centro de Conciliación y Arbitraje Constructores de Paz"
                   width={1536}
                   height={1024}

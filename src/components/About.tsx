@@ -34,7 +34,7 @@ const About: React.FC = () => {
                 className="absolute -bottom-4 -left-4 h-full w-full rounded-[1.75rem] border border-brass-400/40"
               />
               <img
-                src="/img/beatriz-oficina.jpg"
+                src="img/beatriz-oficina.jpg"
                 alt="Beatriz Helena Malavera López en su despacho"
                 width={765}
                 height={933}

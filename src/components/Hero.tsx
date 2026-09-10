@@ -97,7 +97,7 @@ const Hero: React.FC = () => {
                 className="absolute -inset-3 rounded-[2rem] border border-brass-400/25"
               />
               <img
-                src="/img/beatriz-retrato.jpg"
+                src="img/beatriz-retrato.jpg"
                 alt="Retrato profesional de Beatriz Helena Malavera López"
                 width={1071}
                 height={1281}
